@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
-import { ArrowLeft, Upload, Star } from "lucide-react"
+import { ArrowLeft, Upload } from "lucide-react"
 import Link from "next/link"
 import { Zilla_Slab } from "next/font/google"
 
@@ -18,10 +18,7 @@ const zillaSlab = Zilla_Slab({
 interface ProductFormData {
   name: string
   price: string
-  originalPrice: string
-  rating: number
   image: string
-  onSale: boolean
   description: string
   shortDescription: string
 }
@@ -30,10 +27,7 @@ export default function NewProductForm() {
   const [formData, setFormData] = useState<ProductFormData>({
     name: "",
     price: "",
-    originalPrice: "",
-    rating: 5,
     image: "",
-    onSale: false,
     description: "",
     shortDescription: "",
   })
@@ -47,10 +41,6 @@ export default function NewProductForm() {
       ...prev,
       [name]: type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
     }))
-  }
-
-  const handleRatingChange = (rating: number) => {
-    setFormData((prev) => ({ ...prev, rating }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -70,10 +60,7 @@ export default function NewProductForm() {
       setFormData({
         name: "",
         price: "",
-        originalPrice: "",
-        rating: 5,
         image: "",
-        onSale: false,
         description: "",
         shortDescription: "",
       })
@@ -141,7 +128,7 @@ export default function NewProductForm() {
               </div>
 
               {/* Price */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-2">
                 <div>
                   <label htmlFor="price" className="block text-sm font-semibold text-gray-700 mb-2">
                     Price ($) *
@@ -159,58 +146,6 @@ export default function NewProductForm() {
                     placeholder="0.00"
                   />
                 </div>
-                <div>
-                  <label htmlFor="originalPrice" className="block text-sm font-semibold text-gray-700 mb-2">
-                    Original Price ($)
-                  </label>
-                  <input
-                    type="number"
-                    id="originalPrice"
-                    name="originalPrice"
-                    value={formData.originalPrice}
-                    onChange={handleInputChange}
-                    min="0"
-                    step="0.01"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
-                    placeholder="0.00"
-                  />
-                </div>
-              </div>
-
-              {/* Rating */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Rating *</label>
-                <div className="flex gap-1">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      key={star}
-                      type="button"
-                      onClick={() => handleRatingChange(star)}
-                      className="p-1 hover:scale-110 transition-transform"
-                    >
-                      <Star
-                        className={`w-6 h-6 ${
-                          star <= formData.rating ? "text-amber-400 fill-amber-400" : "text-gray-300"
-                        }`}
-                      />
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* On Sale Toggle */}
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  id="onSale"
-                  name="onSale"
-                  checked={formData.onSale}
-                  onChange={handleInputChange}
-                  className="w-4 h-4 text-amber-600 bg-gray-100 border-gray-300 rounded focus:ring-amber-500 focus:ring-2"
-                />
-                <label htmlFor="onSale" className="ml-2 text-sm font-semibold text-gray-700">
-                  Product is on sale
-                </label>
               </div>
             </div>
 
