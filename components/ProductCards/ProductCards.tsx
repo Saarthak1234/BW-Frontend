@@ -19,6 +19,7 @@ const products = [
 		price: 18,
 		originalPrice: 24,
 		rating: 5,
+		sales: 112,
 		image: "/images/Highland-Greek-Yogurt-Blueberry.webp",
 		onSale: true,
 		description:
@@ -32,6 +33,7 @@ const products = [
 		price: 24,
 		originalPrice: null,
 		rating: 5,
+		sales: 12,
 		image: "/images/Britannia-Cheese-Slices.jpg",
 		onSale: false,
 		description:
@@ -45,6 +47,7 @@ const products = [
 		price: 32,
 		originalPrice: 35,
 		rating: 4,
+		sales: 17,
 		image: "/images/Loacker-Hazelnut-Wafer-Minis.jpg",
 		onSale: true,
 		description:
@@ -58,6 +61,7 @@ const products = [
 		price: 24,
 		originalPrice: null,
 		rating: 4,
+		sales: 19,
 		image: "/images/Golden-Pineapple.jpg",
 		onSale: false,
 		description:
@@ -71,6 +75,7 @@ const products = [
 		price: 13,
 		originalPrice: 18,
 		rating: 4,
+		sales: 20,
 		image: "/images/Beetroot.jpg",
 		onSale: true,
 		description:
@@ -84,6 +89,7 @@ const products = [
 		price: 40,
 		originalPrice: 48,
 		rating: 5,
+		sales: 15,
 		image: "/images/Amul-Butter.jpg",
 		onSale: true,
 		description:
@@ -97,6 +103,7 @@ const products = [
 		price: 26,
 		originalPrice: 30,
 		rating: 4,
+		sales: 22,
 		image: "/images/Mother-Dairy-Toned-Milk.jpg",
 		onSale: true,
 		description:
@@ -110,6 +117,7 @@ const products = [
 		price: 10,
 		originalPrice: null,
 		rating: 4,
+		sales: 30,
 		image: "/images/Parle-G-Biscuits.jpg",
 		onSale: false,
 		description:
@@ -123,6 +131,7 @@ const products = [
 		price: 55,
 		originalPrice: 65,
 		rating: 5,
+		sales: 25,
 		image: "/images/Fortune-Chakki-Atta.webp",
 		onSale: true,
 		description:
@@ -136,6 +145,7 @@ const products = [
 		price: 75,
 		originalPrice: 90,
 		rating: 5,
+		sales: 18,
 		image: "/images/Kissan-Mixed-Fruit-Jam.jpg",
 		onSale: true,
 		description:
@@ -144,6 +154,7 @@ const products = [
 			"Sweet and fruity jam with a blend of mixed fruits — perfect for breakfast.",
 	},
 ];
+const sortedProducts = [...products].sort((a, b) => b.sales - a.sales);
 
 export default function ProductsSection() {
 	return (
@@ -157,7 +168,7 @@ export default function ProductsSection() {
 					Our Premium Products
 				</h1>
 				<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-					{products.map((product) => (
+					{sortedProducts.map((product) => (
 						<div
 							key={product.id}
 							className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg hover:border-2 hover:border-amber-400 hover:scale-101 transition-all duration-300 border-2 border-transparent"
