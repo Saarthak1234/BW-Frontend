@@ -47,7 +47,7 @@ const products = [
 		price: 32,
 		originalPrice: 35,
 		rating: 4,
-		sales: 17,
+		sales: 137,
 		image: "/images/Loacker-Hazelnut-Wafer-Minis.jpg",
 		onSale: true,
 		description:
