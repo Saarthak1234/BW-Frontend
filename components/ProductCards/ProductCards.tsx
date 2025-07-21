@@ -154,7 +154,6 @@ const products = [
 			"Sweet and fruity jam with a blend of mixed fruits — perfect for breakfast.",
 	},
 ];
-const sortedProducts = [...products].sort((a, b) => b.sales - a.sales);
 
 export default function ProductsSection() {
 	return (
@@ -168,7 +167,7 @@ export default function ProductsSection() {
 					Our Premium Products
 				</h1>
 				<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-					{sortedProducts.map((product) => (
+					{products.map((product) => (
 						<div
 							key={product.id}
 							className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg hover:border-2 hover:border-amber-400 hover:scale-101 transition-all duration-300 border-2 border-transparent"
