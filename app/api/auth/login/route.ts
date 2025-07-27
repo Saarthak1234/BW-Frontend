@@ -62,8 +62,7 @@ export async function POST(request: NextRequest) {
     // Create JWT token using jose
     const secret = new TextEncoder().encode(JWT_SECRET)
     const token = await new SignJWT({ 
-      email: ADMIN_EMAIL,
-      role: 'admin'
+      email: ADMIN_EMAIL
     })
       .setProtectedHeader({ alg: 'HS256' })
       .setIssuedAt()
@@ -75,8 +74,7 @@ export async function POST(request: NextRequest) {
       success: true,
       message: 'Login successful',
       data: {
-        email: ADMIN_EMAIL,
-        role: 'admin'
+        email: ADMIN_EMAIL
       }
     })
 

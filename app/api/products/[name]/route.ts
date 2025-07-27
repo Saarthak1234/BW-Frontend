@@ -113,7 +113,7 @@ export async function PATCH(
       data: updateData
     })
 
-    return NextResponse.json({
+    return NextResponse.json({ 
       success: true,
       data: updatedProduct
     })

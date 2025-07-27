@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
-import ProductsSection from "@/components/ProductCards/AdminProductCards";
+import AdminProductsSection from "@/components/ProductCards/AdminProductCards";
 
 
 export default function ProductsPage() {
@@ -13,7 +13,7 @@ export default function ProductsPage() {
 
   return (
     <div>
-      <ProductsSection />
+      <AdminProductsSection />
     </div>
   );
 }

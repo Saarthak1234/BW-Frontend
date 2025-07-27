@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Plus } from "lucide-react"
@@ -13,73 +14,40 @@ const zillaSlab = Zilla_Slab({
   variable: "--font-zilla-slab",
 })
 
-const products = [
-  {
-    id: 1,
-    name: "Blueberry Greek Yogurt",
-    price: 18,
-    originalPrice: 24,
-    rating: 5,
-    image: "/placeholder.svg?height=200&width=200",
-    onSale: true,
-    description:
-      "Creamy and delicious Greek yogurt packed with fresh blueberries. Made with live active cultures and no artificial flavors. Rich in protein and probiotics, perfect for a healthy breakfast or snack. Our premium yogurt is made from the finest milk and real fruit pieces for an authentic taste experience.",
-    shortDescription: "Creamy Greek yogurt packed with fresh blueberries and live active cultures for a healthy snack.",
-  },
-  {
-    id: 2,
-    name: "Britannia Cheese Slices",
-    price: 24,
-    originalPrice: null,
-    rating: 5,
-    image: "/placeholder.svg?height=200&width=200",
-    onSale: false,
-    description:
-      "Premium quality cheese slices perfect for sandwiches, burgers, and cooking. Made from fresh milk with no artificial preservatives. Each slice is individually wrapped to maintain freshness and flavor. Ideal for melting and provides a rich, creamy taste that enhances any dish.",
-    shortDescription:
-      "Premium quality cheese slices perfect for sandwiches, burgers, and cooking with no artificial preservatives.",
-  },
-  {
-    id: 3,
-    name: "Napolitanke Ljesnjak",
-    price: 32,
-    originalPrice: 35,
-    rating: 4,
-    image: "/placeholder.svg?height=200&width=200",
-    onSale: true,
-    description:
-      "Delicious hazelnut wafer cookies with layers of crispy wafers and smooth hazelnut cream. A perfect treat for coffee time or as a sweet snack. Made with real hazelnuts and premium ingredients. Each bite delivers a satisfying crunch followed by rich, nutty flavor that melts in your mouth.",
-    shortDescription:
-      "Delicious hazelnut wafer cookies with layers of crispy wafers and smooth hazelnut cream filling.",
-  },
-  {
-    id: 4,
-    name: "Golden Pineapple",
-    price: 24,
-    originalPrice: null,
-    rating: 4,
-    image: "/placeholder.svg?height=200&width=200",
-    onSale: false,
-    description:
-      "Fresh, sweet golden pineapple bursting with tropical flavor. Hand-picked at peak ripeness to ensure maximum sweetness and juiciness. Rich in vitamin C, manganese, and digestive enzymes. Perfect for eating fresh, adding to smoothies, or using in cooking and baking for a tropical twist.",
-    shortDescription: "Fresh, sweet golden pineapple bursting with tropical flavor, hand-picked at peak ripeness.",
-  },
-  {
-    id: 5,
-    name: "Beatroot",
-    price: 13,
-    originalPrice: 18,
-    rating: 4,
-    image: "/placeholder.svg?height=200&width=200",
-    onSale: true,
-    description:
-      "Fresh, organic beetroot known for its earthy flavor and vibrant color. Packed with essential nutrients, fiber, and antioxidants. Perfect for roasting, juicing, or adding to salads. These beetroots are grown without pesticides and harvested at peak freshness to deliver maximum nutritional value and taste.",
-    shortDescription:
-      "Fresh, organic beetroot known for its earthy flavor and vibrant color, packed with essential nutrients.",
-  },
-]
-
 export default function AdminProductsSection() {
+
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true)
+        const response = await fetch('/api/products')
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        
+        const result = await response.json()
+        
+        if (result.success) {
+          setProducts(result.data)
+        } else {
+          throw new Error(result.error || 'Failed to fetch products')
+        }
+      } catch (err) {
+        console.error('Error fetching products:', err)
+        setError('Failed to load products. Please try again later.')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchProducts()
+  }, [])
+
   return (
     <div className={`min-h-screen bg-amber-50 py-12 sm:py-16 lg:py-24 ${zillaSlab.variable}`}>
       <div className="container mx-auto px-4">
@@ -129,7 +97,7 @@ export default function AdminProductsSection() {
                 </div>
 
                 {/* Update Details Button */}
-                <Link href={`/admin/products/${product.id}/edit`} className="flex justify-center">
+                <Link href={`/admin/products/${product.name}/edit`} className="flex justify-center">
                   <button className="w-auto sm:w-1/2 bg-amber-500 text-white py-2 px-4 hover:bg-gray-800 transition-all duration-300 ease-in-out text-sm rounded-sm font-semibold">
                     Update Details
                   </button>

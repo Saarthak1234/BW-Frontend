@@ -5,6 +5,7 @@ import type React from "react"
 import { useState } from "react"
 import { ArrowLeft, Upload } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Zilla_Slab } from "next/font/google"
 
 // Configure the Google Font
@@ -24,6 +25,8 @@ interface ProductFormData {
 }
 
 export default function NewProductForm() {
+  const router = useRouter()
+  
   const [formData, setFormData] = useState<ProductFormData>({
     name: "",
     price: "",
@@ -34,6 +37,7 @@ export default function NewProductForm() {
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target
@@ -41,30 +45,71 @@ export default function NewProductForm() {
       ...prev,
       [name]: type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
     }))
+    
+    // Clear error when user starts typing
+    if (error) {
+      setError(null)
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setError(null)
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+    try {
+      // Prepare the data for API request
+      const productData = {
+        name: formData.name.trim(),
+        price: parseFloat(formData.price),
+        image: formData.image.trim(),
+        description: formData.description.trim(),
+        shortDescription: formData.shortDescription.trim(),
+      }
 
-    console.log("Product data:", formData)
-    setSubmitSuccess(true)
-    setIsSubmitting(false)
+      // Validate required fields
+      if (!productData.name || !productData.price || !productData.description || !productData.shortDescription) {
+        throw new Error('Please fill in all required fields')
+      }
 
-    // Reset form after success
-    setTimeout(() => {
-      setSubmitSuccess(false)
-      setFormData({
-        name: "",
-        price: "",
-        image: "",
-        description: "",
-        shortDescription: "",
+      // Make API call to create new product
+      const response = await fetch('/api/products', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(productData),
       })
-    }, 2000)
+
+      if (!response.ok) {
+        if (response.status === 409) {
+          throw new Error('A product with this name already exists')
+        } else if (response.status === 400) {
+          throw new Error('Invalid product data. Please check your inputs.')
+        } else {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+      }
+
+      const result = await response.json()
+
+      if (result.success) {
+        console.log("Product created successfully:", result.data)
+        setSubmitSuccess(true)
+        
+        // Redirect to products page after 2 seconds
+        setTimeout(() => {
+          router.push('/admin/products')
+        }, 2000)
+      } else {
+        throw new Error(result.error || 'Failed to create product')
+      }
+    } catch (err) {
+      console.error('Error creating product:', err)
+      setError(err instanceof Error ? err.message : 'Failed to create product. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   if (submitSuccess) {
@@ -80,7 +125,12 @@ export default function NewProductForm() {
             <h2 className={`text-2xl font-bold text-gray-900 mb-2 ${zillaSlab.className}`}>
               Product Added Successfully!
             </h2>
-            <p className="text-gray-600 mb-6">Your new product has been added to the catalog.</p>
+            <p className="text-gray-600 mb-6">
+              Your new product "{formData.name}" has been added to the catalog.
+            </p>
+            <p className="text-sm text-gray-500 mb-6">
+              Redirecting to products page...
+            </p>
             <Link href="/admin/products">
               <button className="bg-amber-500 hover:bg-amber-600 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300">
                 Back to Products
@@ -105,6 +155,18 @@ export default function NewProductForm() {
           <h1 className={`text-3xl sm:text-4xl font-bold text-gray-900 ${zillaSlab.className}`}>Add New Product</h1>
         </div>
 
+        {/* Error Message */}
+        {error && (
+          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
+            <div className="flex items-center">
+              <svg className="w-5 h-5 text-red-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <p className="text-red-800 font-medium">{error}</p>
+            </div>
+          </div>
+        )}
+
         {/* Form */}
         <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-6 sm:p-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -122,9 +184,11 @@ export default function NewProductForm() {
                   value={formData.name}
                   onChange={handleInputChange}
                   required
+                  maxLength={100}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
                   placeholder="Enter product name"
                 />
+                <p className="text-xs text-gray-500 mt-1">{formData.name.length}/100 characters</p>
               </div>
 
               {/* Price */}
@@ -194,10 +258,11 @@ export default function NewProductForm() {
                   onChange={handleInputChange}
                   required
                   rows={3}
+                  maxLength={200}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors resize-none"
                   placeholder="Brief description for product cards..."
                 />
-                <p className="text-xs text-gray-500 mt-1">{formData.shortDescription.length}/150 characters</p>
+                <p className="text-xs text-gray-500 mt-1">{formData.shortDescription.length}/200 characters</p>
               </div>
             </div>
           </div>
@@ -214,10 +279,11 @@ export default function NewProductForm() {
               onChange={handleInputChange}
               required
               rows={6}
+              maxLength={1000}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors resize-none"
               placeholder="Detailed product description..."
             />
-            <p className="text-xs text-gray-500 mt-1">{formData.description.length}/500 characters</p>
+            <p className="text-xs text-gray-500 mt-1">{formData.description.length}/1000 characters</p>
           </div>
 
           {/* Submit Button */}
@@ -226,19 +292,20 @@ export default function NewProductForm() {
               <button
                 type="button"
                 className="w-full sm:w-auto px-8 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-semibold"
+                disabled={isSubmitting}
               >
                 Cancel
               </button>
             </Link>
             <button
               type="submit"
-              disabled={isSubmitting}
-              className="flex-1 sm:flex-none bg-amber-500 hover:bg-amber-600 disabled:bg-amber-300 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2"
+              disabled={isSubmitting || !formData.name.trim() || !formData.price || !formData.description.trim() || !formData.shortDescription.trim()}
+              className="flex-1 sm:flex-none bg-amber-500 hover:bg-amber-600 disabled:bg-amber-300 disabled:cursor-not-allowed text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2"
             >
               {isSubmitting ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  Adding Product...
+                  Creating Product...
                 </>
               ) : (
                 "Add Product"

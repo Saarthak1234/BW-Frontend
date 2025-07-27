@@ -1,12 +1,10 @@
-"use client"
-
 import type React from "react"
+import { useState, useEffect } from "react"
 
 import { useParams, useRouter } from "next/navigation"
 import Image from "next/image"
-import { ArrowLeft, Save, Trash2, Upload, Star } from "lucide-react"
+import { ArrowLeft, Save, Trash2, Upload } from "lucide-react"
 import { Zilla_Slab } from "next/font/google"
-import { useState } from "react"
 
 // Configure the Google Font
 const zillaSlab = Zilla_Slab({
@@ -16,81 +14,20 @@ const zillaSlab = Zilla_Slab({
   variable: "--font-zilla-slab",
 })
 
-const products = [
-  {
-    id: 1,
-    name: "Blueberry Greek Yogurt",
-    price: 18,
-    originalPrice: 24,
-    rating: 5,
-    image: "/placeholder.svg?height=400&width=400",
-    onSale: true,
-    description:
-      "Creamy and delicious Greek yogurt packed with fresh blueberries. Made with live active cultures and no artificial flavors. Rich in protein and probiotics, perfect for a healthy breakfast or snack. Our premium yogurt is made from the finest milk and real fruit pieces for an authentic taste experience. Each serving contains 15g of protein and billions of live probiotics to support digestive health. The blueberries are carefully selected for their sweetness and nutritional value, providing antioxidants and natural flavor. This yogurt is also an excellent source of calcium and vitamin D, making it a nutritious choice for the whole family.",
-    shortDescription:
-      "Creamy and delicious Greek yogurt packed with fresh blueberries. Made with live active cultures and no artificial flavors. Rich in protein and probiotics, perfect for a healthy breakfast or snack.",
-  },
-  {
-    id: 2,
-    name: "Britannia Cheese Slices",
-    price: 24,
-    originalPrice: null,
-    rating: 5,
-    image: "/placeholder.svg?height=400&width=400",
-    onSale: false,
-    description:
-      "Premium quality cheese slices perfect for sandwiches, burgers, and cooking. Made from fresh milk with no artificial preservatives. Each slice is individually wrapped to maintain freshness and flavor. Ideal for melting and provides a rich, creamy taste that enhances any dish. Our cheese is aged to perfection, developing a smooth texture and balanced flavor that appeals to all ages. Whether you're making a grilled cheese sandwich, adding to a burger, or using in recipes, these slices deliver consistent quality and taste. The convenient packaging makes it easy to use just what you need while keeping the rest fresh.",
-    shortDescription:
-      "Premium quality cheese slices perfect for sandwiches, burgers, and cooking. Made from fresh milk with no artificial preservatives.",
-  },
-  {
-    id: 3,
-    name: "Napolitanke Ljesnjak",
-    price: 32,
-    originalPrice: 35,
-    rating: 4,
-    image: "/placeholder.svg?height=400&width=400",
-    onSale: true,
-    description:
-      "Delicious hazelnut wafer cookies with layers of crispy wafers and smooth hazelnut cream. A perfect treat for coffee time or as a sweet snack. Made with real hazelnuts and premium ingredients. Each bite delivers a satisfying crunch followed by rich, nutty flavor that melts in your mouth. These European-style wafers are crafted using traditional methods, ensuring authentic taste and texture. The hazelnut cream filling is made from carefully roasted hazelnuts, providing a rich and indulgent experience. Perfect for sharing with family and friends or enjoying as a personal treat with your favorite beverage.",
-    shortDescription:
-      "Delicious hazelnut wafer cookies with layers of crispy wafers and smooth hazelnut cream. A perfect treat for coffee time or as a sweet snack.",
-  },
-  {
-    id: 4,
-    name: "Golden Pineapple",
-    price: 24,
-    originalPrice: null,
-    rating: 4,
-    image: "/placeholder.svg?height=400&width=400",
-    onSale: false,
-    description:
-      "Fresh, sweet golden pineapple bursting with tropical flavor. Hand-picked at peak ripeness to ensure maximum sweetness and juiciness. Rich in vitamin C, manganese, and digestive enzymes. Perfect for eating fresh, adding to smoothies, or using in cooking and baking for a tropical twist. Our pineapples are sourced from sustainable farms where they're allowed to ripen naturally on the plant, resulting in superior flavor and nutritional content. The golden variety is known for its exceptional sweetness and lower acidity, making it enjoyable for everyone. Each pineapple is carefully inspected to ensure it meets our high standards for quality and freshness.",
-    shortDescription:
-      "Fresh, sweet golden pineapple bursting with tropical flavor. Hand-picked at peak ripeness to ensure maximum sweetness and juiciness.",
-  },
-  {
-    id: 5,
-    name: "Beetroot",
-    price: 13,
-    originalPrice: 18,
-    rating: 4,
-    image: "/placeholder.svg?height=400&width=400",
-    onSale: true,
-    description:
-      "Fresh, organic beetroot known for its earthy flavor and vibrant color. Packed with essential nutrients, fiber, and antioxidants. Perfect for roasting, juicing, or adding to salads. These beetroots are grown without pesticides and harvested at peak freshness to deliver maximum nutritional value and taste. Rich in folate, potassium, and nitrates, beetroot supports cardiovascular health and athletic performance. The deep red color comes from betalains, powerful antioxidants that provide anti-inflammatory benefits. Whether you roast them for a sweet, caramelized flavor or juice them for a nutritious drink, these beetroots offer versatility and exceptional health benefits.",
-    shortDescription:
-      "Fresh, organic beetroot known for its earthy flavor and vibrant color. Packed with essential nutrients, fiber, and antioxidants.",
-  },
-]
+interface Product {
+  id?: number
+  name: string
+  price: number
+  image: string
+  description: string
+  shortDescription: string
+  createdAt?: string
+}
 
 interface ProductFormData {
   name: string
   price: number
-  originalPrice: number | null
-  rating: number
   image: string
-  onSale: boolean
   description: string
   shortDescription: string
 }
@@ -98,18 +35,18 @@ interface ProductFormData {
 export default function EditProductPage() {
   const params = useParams()
   const router = useRouter()
-  const productId = Number.parseInt(params.id as string)
-  const product = products.find((p) => p.id === productId)
+  const productName = params.name as string // Using name instead of id based on your reference code
+
+  const [product, setProduct] = useState<Product | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   const [formData, setFormData] = useState<ProductFormData>({
-    name: product?.name || "",
-    price: product?.price || 0,
-    originalPrice: product?.originalPrice || null,
-    rating: product?.rating || 5,
-    image: product?.image || "",
-    onSale: product?.onSale || false,
-    description: product?.description || "",
-    shortDescription: product?.shortDescription || "",
+    name: "",
+    price: 0,
+    image: "",
+    description: "",
+    shortDescription: "",
   })
 
   const [isUpdating, setIsUpdating] = useState(false)
@@ -117,19 +54,116 @@ export default function EditProductPage() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [updateSuccess, setUpdateSuccess] = useState(false)
 
-  if (!product) {
+  // Fetch single product from API
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        setLoading(true)
+        console.log(`Fetching product with name: ${productName}`)
+        const response = await fetch(`/api/products/${productName}`)
+        
+        if (!response.ok) {
+          if (response.status === 404) {
+            setError('Product not found')
+          } else {
+            throw new Error(`HTTP error! status: ${response.status}`)
+          }
+          return
+        }
+        
+        const result = await response.json()
+        
+        if (result.success) {
+          const productData = result.data
+          setProduct(productData)
+          
+          // Initialize form data with fetched product data
+          setFormData({
+            name: productData.name || "",
+            price: productData.price || 0,
+            image: productData.image || "",
+            description: productData.description || "",
+            shortDescription: productData.shortDescription || "",
+          })
+        } else {
+          throw new Error(result.error || 'Failed to fetch product')
+        }
+      } catch (err) {
+        console.error('Error fetching product:', err)
+        setError('Failed to load product. Please try again later.')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    if (productName) {
+      fetchProduct()
+    }
+  }, [productName])
+
+  // Loading state
+  if (loading) {
     return (
-      <div className={`min-h-screen bg-amber-50 flex items-center justify-center p-4 ${zillaSlab.variable}`}>
-        <div className="text-center max-w-md w-full">
-          <h1 className={`text-xl sm:text-2xl font-bold text-gray-900 mb-4 ${zillaSlab.className}`}>
-            Product Not Found
-          </h1>
+      <div className={`min-h-screen bg-amber-50 ${zillaSlab.variable}`}>
+        {/* Header with Back Button */}
+        <div className="sticky top-0 z-40 bg-amber-50/80 backdrop-blur-sm border-none p-4 sm:p-6">
           <button
             onClick={() => router.back()}
-            className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-lg transition-colors duration-300 w-full sm:w-auto"
+            className="w-10 h-10 sm:w-12 sm:h-12 bg-white hover:bg-amber-50 text-gray-600 hover:text-amber-600 rounded-full shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center border border-gray-200"
           >
-            Go Back
+            <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
+        </div>
+        
+        <div className="flex justify-center items-center min-h-[400px]">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-amber-600"></div>
+        </div>
+      </div>
+    )
+  }
+
+  // Error or Product Not Found state
+  if (error || !product) {
+    return (
+      <div className={`min-h-screen bg-amber-50 ${zillaSlab.variable}`}>
+        {/* Header with Back Button */}
+        <div className="sticky top-0 z-40 bg-amber-50/80 backdrop-blur-sm border-none p-4 sm:p-6">
+          <button
+            onClick={() => router.back()}
+            className="w-10 h-10 sm:w-12 sm:h-12 bg-white hover:bg-amber-50 text-gray-600 hover:text-amber-600 rounded-full shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center border border-gray-200"
+          >
+            <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+          </button>
+        </div>
+        
+        <div className="flex items-center justify-center min-h-[400px] p-4">
+          <div className="text-center max-w-md w-full">
+            <h1 className={`text-xl sm:text-2xl font-bold text-gray-900 mb-4 ${zillaSlab.className}`}>
+              {error === 'Product not found' ? 'Product Not Found' : 'Error Loading Product'}
+            </h1>
+            <p className="text-gray-600 mb-6">
+              {error === 'Product not found' 
+                ? 'The product you are looking for does not exist or has been removed.'
+                : error || 'Something went wrong while loading the product.'
+              }
+            </p>
+            <div className="space-y-3">
+              <button
+                onClick={() => router.back()}
+                className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-lg transition-colors duration-300 w-full sm:w-auto"
+              >
+                Go Back
+              </button>
+              {error && error !== 'Product not found' && (
+                <button
+                  onClick={() => window.location.reload()}
+                  className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg transition-colors duration-300 w-full sm:w-auto ml-0 sm:ml-3"
+                >
+                  Try Again
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     )
@@ -148,33 +182,79 @@ export default function EditProductPage() {
   }
 
   const handleUpdate = async () => {
-    setIsUpdating(true)
+    try {
+      setIsUpdating(true)
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+      // Make API call to update the product
+      const response = await fetch(`/api/products/${productName}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
 
-    console.log("Updated product data:", formData)
-    setUpdateSuccess(true)
-    setIsUpdating(false)
+      if (!response.ok) {
+        console.error('Failed to update product:', response.statusText)
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
 
-    // Hide success message after 3 seconds
-    setTimeout(() => {
-      setUpdateSuccess(false)
-    }, 3000)
+      const result = await response.json()
+
+      if (result.success) {
+        console.log("Updated product data:", result.data)
+        setUpdateSuccess(true)
+        
+        // Update the product state with the new data
+        setProduct(result.data)
+
+        // Hide success message after 3 seconds
+        setTimeout(() => {
+          setUpdateSuccess(false)
+        }, 3000)
+      } else {
+        throw new Error(result.error || 'Failed to update product')
+      }
+    } catch (err) {
+      console.error('Error updating product:', err)
+      // You might want to show an error message to the user here
+      alert('Failed to update product. Please try again.')
+    } finally {
+      setIsUpdating(false)
+    }
   }
 
   const handleDelete = async () => {
-    setIsDeleting(true)
+    try {
+      setIsDeleting(true)
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+      // Make API call to delete the product
+      const response = await fetch(`/api/products/${productName}`, {
+        method: 'DELETE',
+      })
 
-    console.log("Deleted product:", productId)
-    setIsDeleting(false)
-    setShowDeleteConfirm(false)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
 
-    // Redirect to products page
-    router.push("/admin/products")
+      const result = await response.json()
+
+      if (result.success) {
+        console.log("Deleted product:", productName)
+        
+        // Redirect to products page after successful deletion
+        router.push("/admin/products")
+      } else {
+        throw new Error(result.error || 'Failed to delete product')
+      }
+    } catch (err) {
+      console.error('Error deleting product:', err)
+      // You might want to show an error message to the user here
+      alert('Failed to delete product. Please try again.')
+    } finally {
+      setIsDeleting(false)
+      setShowDeleteConfirm(false)
+    }
   }
 
   return (
@@ -237,17 +317,25 @@ export default function EditProductPage() {
               {/* Image Section */}
               <div className="w-full lg:w-1/2">
                 <div className="aspect-square sm:aspect-[4/3] lg:aspect-square relative bg-gray-100">
-                  <Image
-                    src={formData.image || "/placeholder.svg"}
-                    alt={formData.name}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    priority
-                    onError={(e) => {
-                      ;(e.target as HTMLImageElement).src = "/placeholder.svg?height=400&width=400"
-                    }}
-                  />
+                  {formData.image ? (
+                    <Image
+                      src={formData.image}
+                      alt={formData.name}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      priority
+                      onError={(e) => {
+                        e.currentTarget.src = "/placeholder.svg"
+                      }}
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gray-200">
+                      <svg className="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                  )}
                 </div>
 
                 {/* Image URL Input */}
@@ -283,65 +371,17 @@ export default function EditProductPage() {
                   </div>
 
                   {/* Price */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">Price ($)</label>
-                      <input
-                        type="number"
-                        name="price"
-                        value={formData.price}
-                        onChange={handleInputChange}
-                        min="0"
-                        step="0.01"
-                        className="w-full text-2xl sm:text-3xl lg:text-4xl font-bold text-amber-600 bg-transparent border-2 border-transparent hover:border-gray-200 focus:border-amber-500 rounded-lg px-3 py-2 transition-colors"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">Original Price ($)</label>
-                      <input
-                        type="number"
-                        name="originalPrice"
-                        value={formData.originalPrice || ""}
-                        onChange={handleInputChange}
-                        min="0"
-                        step="0.01"
-                        className="w-full text-lg font-semibold text-gray-500 bg-transparent border-2 border-transparent hover:border-gray-200 focus:border-amber-500 rounded-lg px-3 py-2 transition-colors"
-                        placeholder="Optional"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Rating */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Rating</label>
-                    <div className="flex gap-1">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <button
-                          key={star}
-                          type="button"
-                          onClick={() => handleRatingChange(star)}
-                          className="p-1 hover:scale-110 transition-transform"
-                        >
-                          <Star
-                            className={`w-6 h-6 ${
-                              star <= formData.rating ? "text-amber-400 fill-amber-400" : "text-gray-300"
-                            }`}
-                          />
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* On Sale Toggle */}
-                  <div className="flex items-center">
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Price ($)</label>
                     <input
-                      type="checkbox"
-                      name="onSale"
-                      checked={formData.onSale}
+                      type="number"
+                      name="price"
+                      value={formData.price}
                       onChange={handleInputChange}
-                      className="w-4 h-4 text-amber-600 bg-gray-100 border-gray-300 rounded focus:ring-amber-500 focus:ring-2"
+                      min="0"
+                      step="0.01"
+                      className="w-full text-2xl sm:text-3xl lg:text-4xl font-bold text-amber-600 bg-transparent border-2 border-transparent hover:border-gray-200 focus:border-amber-500 rounded-lg px-3 py-2 transition-colors"
                     />
-                    <label className="ml-2 text-sm font-semibold text-gray-700">Product is on sale</label>
                   </div>
 
                   {/* Stock Status */}
@@ -362,6 +402,13 @@ export default function EditProductPage() {
                     />
                     <p className="text-xs text-gray-500 mt-1">{formData.shortDescription.length}/200 characters</p>
                   </div>
+
+                  {/* Created Date */}
+                  {product.createdAt && (
+                    <div className="text-sm text-gray-500">
+                      Added: {new Date(product.createdAt).toLocaleDateString()}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
