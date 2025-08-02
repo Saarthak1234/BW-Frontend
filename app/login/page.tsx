@@ -9,7 +9,7 @@ export default function AdminLoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
-    username: "",
+    email: "",
     password: "",
     rememberMe: false,
   })
@@ -28,18 +28,45 @@ export default function AdminLoginPage() {
     setIsLoading(true)
     setError("")
 
-    // Simulate API call for admin authentication
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    try {
+      const response = await fetch("http://localhost:3000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: 'include', // Important: This ensures cookies are sent/received
+        body: JSON.stringify({
+          email: formData.email, // Backend expects 'email', not 'Email'
+          password: formData.password,
+        }),
+      })
 
-    // Simple demo authentication (replace with real auth logic)
-    if (formData.username === "admin" && formData.password === "admin123") {
-      // Redirect to admin dashboard
-      router.push("/admin/dashboard")
-    } else {
-      setError("Invalid admin credentials. Please try again.")
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        // Login successful - token is stored as HTTP-only cookie
+        // Save user info if provided
+        if (data.data) {
+          localStorage.setItem("adminUser", JSON.stringify(data.data))
+        }
+
+        // If remember me is checked, save preference
+        if (formData.rememberMe) {
+          localStorage.setItem("rememberAdmin", "true")
+        }
+
+        // Redirect to admin products page
+        router.push("/admin/products")
+      } else {
+        // Login failed
+        setError(data.error || "Invalid credentials. Please try again.")
+      }
+    } catch (error) {
+      console.error("Login error:", error)
+      setError("Network error. Please check your connection and try again.")
+    } finally {
+      setIsLoading(false)
     }
-    
-    setIsLoading(false)
   }
 
   return (
@@ -76,19 +103,19 @@ export default function AdminLoginPage() {
 
             {/* Login Form - matching home page input styles */}
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Username Field */}
+              {/* Email Field */}
               <div className="space-y-2">
                 <label className="block text-sm font-semibold text-gray-700">
-                  Admin Username
+                  Admin Email
                 </label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-amber-500" />
                   <input
-                    type="text"
-                    name="username"
-                    value={formData.username}
+                    type="email"
+                    name="email"
+                    value={formData.email}
                     onChange={handleInputChange}
-                    placeholder="Enter admin username"
+                    placeholder="Enter admin email"
                     className="w-full pl-10 pr-4 py-3 border border-amber-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all duration-300 bg-white/80 text-black"
                     required
                   />
@@ -119,6 +146,21 @@ export default function AdminLoginPage() {
                     {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
                 </div>
+              </div>
+
+              {/* Remember Me Checkbox */}
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="rememberMe"
+                  name="rememberMe"
+                  checked={formData.rememberMe}
+                  onChange={handleInputChange}
+                  className="h-4 w-4 text-amber-600 focus:ring-amber-500 border-amber-300 rounded"
+                />
+                <label htmlFor="rememberMe" className="ml-2 block text-sm text-gray-700">
+                  Remember me
+                </label>
               </div>
 
               {/* Submit Button - matching home page button style */}

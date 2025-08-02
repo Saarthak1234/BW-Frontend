@@ -38,6 +38,7 @@ export async function POST(request: NextRequest) {
 
     // Check if email matches admin email
     if (email !== ADMIN_EMAIL) {
+      console.error('Invalid email:', email, ADMIN_EMAIL)
       return NextResponse.json(
         {
           success: false,

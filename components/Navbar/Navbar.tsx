@@ -1,32 +1,53 @@
 "use client";
 import { Wheat } from 'lucide-react';
 import Link from 'next/link';
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect } from 'react';
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Check authentication status on component mount
   useEffect(() => {
-    // Replace this with your actual authentication check
-    // For example, checking localStorage, cookies, or calling an API
     const checkAuthStatus = () => {
-      const token = localStorage.getItem('authToken');
-      const user = localStorage.getItem('user');
-      setIsLoggedIn(!!token && !!user);
+      // Check for admin user data in localStorage
+      // Since your backend uses HTTP-only cookies, we check for the stored user data
+      const adminUser = localStorage.getItem('adminUser');
+      setIsLoggedIn(!!adminUser);
     };
 
     checkAuthStatus();
+
+    // Optional: Listen for storage changes to update login status across tabs
+    const handleStorageChange = () => {
+      checkAuthStatus();
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Cleanup listener on component unmount
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
   }, []);
 
-  const handleLogout = () => {
-    // Clear authentication data
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('user');
-    setIsLoggedIn(false);
-    
-    // Optionally redirect to home page
-    window.location.href = '/';
+  const handleLogout = async () => {
+    try {
+      // Call logout API to clear HTTP-only cookie
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include', // Important for sending cookies
+      });
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      // Clear local storage data regardless of API call success
+      localStorage.removeItem('adminUser');
+      localStorage.removeItem('rememberAdmin');
+      setIsLoggedIn(false);
+      
+      // Redirect to home page
+      window.location.href = '/';
+    }
   };
 
   return (
@@ -92,6 +113,18 @@ const Navbar = () => {
                   </div>
                 </div>
               </div>
+              {/* Show admin link only when logged in */}
+              {isLoggedIn && (
+                <div className="space-y-3 pt-4 border-t border-gray-600">
+                  <h3 className="text-lg font-semibold text-white">Admin</h3>
+                  <Link
+                    href="/admin/products"
+                    className="text-sm text-gray-300 hover:text-white transition-colors hover:bg-gray-700 rounded-md p-2 block"
+                  >
+                    Manage Products
+                  </Link>
+                </div>
+              )}
             </div>
           </aside>
         </div>
@@ -107,7 +140,6 @@ const Navbar = () => {
         <li>
           <details>
             <summary className="text-white hover:text-amber-400 hover:bg-gray-800 transition-colors">Products</summary>
-            {/* FIXED: Increased z-index from z-10 to z-50 */}
             <ul className="p-4 bg-gray-800 w-[450px] -mt-4 z-50 shadow-lg border border-gray-700">
               <div className="grid gap-3">
                 <div className="row-span-3 mr-2">
@@ -141,11 +173,24 @@ const Navbar = () => {
                   >
                     <div className="text-sm font-medium leading-none">Bread Flour</div>
                   </Link>
+                  {/* Show admin link in desktop menu when logged in */}
+                  {isLoggedIn && (
+                    <Link
+                      href="/admin/products"
+                      className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-amber-700 hover:shadow-md text-amber-300 hover:text-white focus:bg-amber-700 focus:text-white border-t border-gray-600 mt-2 pt-3"
+                    >
+                      <div className="text-sm font-medium leading-none">Admin Panel</div>
+                    </Link>
+                  )}
                 </div>
               </div>
             </ul>
           </details>
         </li>
+        {/* Show admin link in main menu when logged in */}
+        {isLoggedIn && (
+          <li><Link href="/admin/products" className="text-amber-300 hover:text-amber-400 hover:bg-gray-800 transition-colors">Admin</Link></li>
+        )}
       </ul>
     </div>
     <div className="navbar-end">
