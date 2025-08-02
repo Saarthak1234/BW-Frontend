@@ -208,9 +208,11 @@ export default function HomePage() {
                   <span className="text-gray-500 ml-2 text-base sm:text-lg font-circe">per 5lb bag</span>
                 </div>
                 <div>
+                  <Link href='/products'>
                   <button className="bg-amber-400 text-white py-3 sm:py-4 px-4 hover:bg-gray-800 transition-colors text-base sm:text-lg rounded-sm font-semibold font-circew-1/2  sm:w-auto">
                     View Products
                   </button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -236,9 +238,11 @@ export default function HomePage() {
                   <span className="text-gray-500 ml-2 text-base sm:text-lg font-circe">per 5lb bag</span>
                 </div>
                 <div>
+                  <Link href='/products'>
                   <button className="bg-amber-400 text-white py-3 sm:py-4 px-4 hover:bg-gray-800 transition-colors text-base sm:text-lg rounded-sm font-semibold font-circew-1/2  sm:w-auto">
                     View Products
                   </button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -264,9 +268,11 @@ export default function HomePage() {
                   <span className="text-gray-800 ml-2 text-base sm:text-lg font-circe">per 5lb bag</span>
                 </div>
                 <div>
+                  <Link href='/products'>
                   <button className="bg-amber-400 text-white py-3 sm:py-4 px-4 hover:bg-gray-800 transition-colors text-base sm:text-lg rounded-sm font-semibold font-circew-1/2  sm:w-auto">
                     View Products
                   </button>
+                  </Link>
                 </div>
               </div>
             </div>
