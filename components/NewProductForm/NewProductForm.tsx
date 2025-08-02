@@ -195,7 +195,7 @@ export default function NewProductForm() {
               <div className="space-y-2">
                 <div>
                   <label htmlFor="price" className="block text-sm font-semibold text-gray-700 mb-2">
-                    Price ($) *
+                    Price (₹) *
                   </label>
                   <input
                     type="number"

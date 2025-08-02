@@ -183,7 +183,7 @@ export default function ProductDetailPage() {
                   {/* Price */}
                   <div className="flex items-center space-x-3">
                     <span className="text-2xl sm:text-3xl lg:text-4xl font-bold text-amber-600">
-                      ${Number(product.price).toFixed(2)}
+                      ₹{Number(product.price).toFixed(2)}
                     </span>
                   </div>
 

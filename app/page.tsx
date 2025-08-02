@@ -52,7 +52,7 @@ export default function HomePage() {
     {
       id: "whole-wheat",
       title: "Whole Wheat Flour",
-      price: "$8.99",
+      price: "₹8.99",
       description: "Stone-ground from premium whole wheat kernels, perfect for healthy breads and baking.",
       badge: "Premium Quality",
       badgeColor: "amber",
@@ -72,7 +72,7 @@ export default function HomePage() {
     {
       id: "all-purpose",
       title: "All Purpose Flour",
-      price: "$6.99",
+      price: "₹6.99",
       description: "The baker's favorite - versatile, reliable flour perfect for all your cooking and baking needs.",
       badge: "Versatile Choice",
       badgeColor: "blue",
@@ -93,7 +93,7 @@ export default function HomePage() {
     {
       id: "corn",
       title: "Corn Flour",
-      price: "$9.99",
+      price: "₹9.99",
       description: "High-protein flour specially milled for exceptional bread making with superior rise and texture.",
       badge: "High Protein",
       badgeColor: "green",
@@ -204,7 +204,7 @@ export default function HomePage() {
                   making bread, cakes, or pastries. Sourced from the finest wheat and milled to perfection.
                 </p>
                 <div className="mb-6 sm:mb-8">
-                  <span className="text-2xl sm:text-3xl font-bold text-amber-400 font-circe">$12.99</span>
+                  <span className="text-2xl sm:text-3xl font-bold text-amber-400 font-circe">₹12.99</span>
                   <span className="text-gray-500 ml-2 text-base sm:text-lg font-circe">per 5lb bag</span>
                 </div>
                 <div>
@@ -232,7 +232,7 @@ export default function HomePage() {
                   Perfect for hearty breads and muffins with exceptional taste and texture.
                 </p>
                 <div className="mb-6 sm:mb-8">
-                  <span className="text-2xl sm:text-3xl font-bold text-amber-400 font-circe">$15.99</span>
+                  <span className="text-2xl sm:text-3xl font-bold text-amber-400 font-circe">₹15.99</span>
                   <span className="text-gray-500 ml-2 text-base sm:text-lg font-circe">per 5lb bag</span>
                 </div>
                 <div>
@@ -260,7 +260,7 @@ export default function HomePage() {
                   perfect rise and texture in artisan breads and pizza dough.
                 </p>
                 <div className="mb-6 sm:mb-8">
-                  <span className="text-2xl sm:text-3xl font-bold text-amber-400 font-circe">$14.99</span>
+                  <span className="text-2xl sm:text-3xl font-bold text-amber-400 font-circe">₹14.99</span>
                   <span className="text-gray-800 ml-2 text-base sm:text-lg font-circe">per 5lb bag</span>
                 </div>
                 <div>

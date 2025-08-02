@@ -88,7 +88,7 @@ export default function AdminProductsSection() {
 
                 {/* Price */}
                 <div className="mb-4">
-                  <span className="text-lg font-bold text-amber-600">${product.price}</span>
+                  <span className="text-lg font-bold text-amber-600">₹{product.price}</span>
                 </div>
 
                 {/* Short Description */}
