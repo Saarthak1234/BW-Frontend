@@ -187,20 +187,9 @@ export default function ProductDetailPage() {
                     </span>
                   </div>
 
-                  {/* Stock Status */}
-                  <div className="flex items-center text-green-600 font-semibold">
-                    <span className="w-2 h-2 bg-green-600 rounded-full mr-2"></span>
-                    In Stock
-                  </div>
-
                   {/* Short Description */}
                   <div className="border-t border-gray-100 pt-4">
                     <p className="text-gray-700 leading-relaxed text-sm sm:text-base">{product.shortDescription}</p>
-                  </div>
-
-                  {/* Created Date */}
-                  <div className="text-sm text-gray-500">
-                    Added: {new Date(product.createdAt).toLocaleDateString()}
                   </div>
                 </div>
               </div>

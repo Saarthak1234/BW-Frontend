@@ -379,15 +379,9 @@ export default function EditProductPage() {
                       value={formData.price}
                       onChange={handleInputChange}
                       min="0"
-                      step="0.01"
+                      step="0.1"
                       className="w-full text-2xl sm:text-3xl lg:text-4xl font-bold text-amber-600 bg-transparent border-2 border-transparent hover:border-gray-200 focus:border-amber-500 rounded-lg px-3 py-2 transition-colors"
                     />
-                  </div>
-
-                  {/* Stock Status */}
-                  <div className="flex items-center text-green-600 font-semibold">
-                    <span className="w-2 h-2 bg-green-600 rounded-full mr-2"></span>
-                    In Stock
                   </div>
 
                   {/* Short Description */}
@@ -402,13 +396,6 @@ export default function EditProductPage() {
                     />
                     <p className="text-xs text-gray-500 mt-1">{formData.shortDescription.length}/200 characters</p>
                   </div>
-
-                  {/* Created Date */}
-                  {product.createdAt && (
-                    <div className="text-sm text-gray-500">
-                      Added: {new Date(product.createdAt).toLocaleDateString()}
-                    </div>
-                  )}
                 </div>
               </div>
             </div>
