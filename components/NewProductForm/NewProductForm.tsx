@@ -185,7 +185,7 @@ export default function NewProductForm() {
                   onChange={handleInputChange}
                   required
                   maxLength={100}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
+                  className="w-full text-black px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                   placeholder="Enter product name"
                 />
                 <p className="text-xs text-gray-500 mt-1">{formData.name.length}/100 characters</p>
@@ -206,7 +206,7 @@ export default function NewProductForm() {
                     required
                     min="0"
                     step="0.01"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
+                    className="w-full text-black px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
                     placeholder="0.00"
                   />
                 </div>
@@ -227,7 +227,7 @@ export default function NewProductForm() {
                     name="image"
                     value={formData.image}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors pr-12"
+                    className="w-full text-black table-cellext-black px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors pr-12"
                     placeholder="https://example.com/image.jpg"
                   />
                   <Upload className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -259,7 +259,7 @@ export default function NewProductForm() {
                   required
                   rows={3}
                   maxLength={200}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors resize-none"
+                  className="w-full text-black px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors resize-none"
                   placeholder="Brief description for product cards..."
                 />
                 <p className="text-xs text-gray-500 mt-1">{formData.shortDescription.length}/200 characters</p>
@@ -280,7 +280,7 @@ export default function NewProductForm() {
               required
               rows={6}
               maxLength={1000}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors resize-none"
+              className="w-full text-black px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors resize-none"
               placeholder="Detailed product description..."
             />
             <p className="text-xs text-gray-500 mt-1">{formData.description.length}/1000 characters</p>
