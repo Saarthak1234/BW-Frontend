@@ -93,22 +93,22 @@ const Navbar = () => {
                   </Link>
                   <div className="grid gap-2 mt-2">
                     <Link
-                      href="/products/whole-wheat"
+                      href="/products/MP Sharbati Wheat"
                       className="text-sm text-gray-300 hover:text-white transition-colors hover:bg-gray-700 rounded-md p-2"
                     >
-                      Whole Wheat Flour
+                      MP Sharbati Wheat
                     </Link>
                     <Link
-                      href="/products/all-purpose"
+                      href="/products/Mixture"
                       className="text-sm text-gray-300 hover:text-white transition-colors hover:bg-gray-700 rounded-md p-2"
                     >
-                      All Purpose Flour
+                      Mixture
                     </Link>
                     <Link
-                      href="/products/bread"
+                      href="/products/Haldi"
                       className="text-sm text-gray-300 hover:text-white transition-colors hover:bg-gray-700 rounded-md p-2"
                     >
-                      Bread Flour
+                      Haldi (Grinded)
                     </Link>
                   </div>
                 </div>
@@ -156,22 +156,22 @@ const Navbar = () => {
                 </div>
                 <div className="grid gap-1 mt-3 mr-2">
                   <Link
-                    href="/products/whole-wheat"
+                    href="/products/MP Sharbati Wheat"
                     className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray-700 hover:shadow-md text-gray-300 hover:text-white focus:bg-gray-700 focus:text-white"
                   >
-                    <div className="text-sm font-medium leading-none">Whole Wheat Flour</div>
+                    <div className="text-sm font-medium leading-none">MP Sharbati Wheat</div>
                   </Link>
                   <Link
-                    href="/products/all-purpose"
+                    href="/products/Mixture"
                     className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray-700 hover:shadow-md text-gray-300 hover:text-white focus:bg-gray-700 focus:text-white"
                   >
-                    <div className="text-sm font-medium leading-none">All Purpose Flour</div>
+                    <div className="text-sm font-medium leading-none">Mixture</div>
                   </Link>
                   <Link
-                    href="/products/bread"
+                    href="/products/Haldi"
                     className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray-700 hover:shadow-md text-gray-300 hover:text-white focus:bg-gray-700 focus:text-white"
                   >
-                    <div className="text-sm font-medium leading-none">Bread Flour</div>
+                    <div className="text-sm font-medium leading-none">Haldi (Grinded)</div>
                   </Link>
                   {/* Show admin link in desktop menu when logged in */}
                   {isLoggedIn && (
