@@ -17,6 +17,11 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'via.placeholder.com',
       },
+      {
+        protocol: "https",
+        hostname: "marvel-b1-cdn.bc0a.com", // ✅ added this line
+        pathname: "/**",
+      },
     ],
   },
 };

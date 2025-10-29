@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation"
 import { Wheat, Phone, Mail, MapPin, Award, DollarSign, Package } from "lucide-react"
 import Link from "next/link"
 import { Zilla_Slab } from "next/font/google"
+import Image from "next/image";
 
 // Configure the Google Font
 const zillaSlab = Zilla_Slab({
@@ -119,11 +120,15 @@ export default function HomePage() {
         <div className="relative hero bg-yellow-50 text-white min-h-[500px] sm:min-h-[600px] lg:min-h-[650px] overflow-hidden">
           {/* Background Image */}
           <div className="absolute inset-0">
-            <img
+            <Image
               src="https://marvel-b1-cdn.bc0a.com/f00000000229348/www.silversneakers.com/wp-content/uploads/2024/01/WholeGrains_835833518-1024x683.jpg"
               alt="Premium flour and grains"
+              width={1024}
+              height={683}
               className="w-full h-full object-cover"
+              priority = {true}
             />
+
             {/* FIXED: Reduced z-index from no explicit z-index to z-0 to ensure it stays behind dropdown */}
             <div className="absolute inset-0 bg-black/60 z-0"></div>
           </div>
@@ -209,9 +214,9 @@ export default function HomePage() {
                 </div>
                 <div>
                   <Link href='/products'>
-                  <button className="bg-amber-400 text-white py-3 sm:py-4 px-4 hover:bg-gray-800 transition-colors text-base sm:text-lg rounded-sm font-semibold font-circew-1/2  sm:w-auto">
-                    View Products
-                  </button>
+                    <button className="bg-amber-400 text-white py-3 sm:py-4 px-4 hover:bg-gray-800 transition-colors text-base sm:text-lg rounded-sm font-semibold font-circew-1/2  sm:w-auto">
+                      View Products
+                    </button>
                   </Link>
                 </div>
               </div>
@@ -239,9 +244,9 @@ export default function HomePage() {
                 </div>
                 <div>
                   <Link href='/products'>
-                  <button className="bg-amber-400 text-white py-3 sm:py-4 px-4 hover:bg-gray-800 transition-colors text-base sm:text-lg rounded-sm font-semibold font-circew-1/2  sm:w-auto">
-                    View Products
-                  </button>
+                    <button className="bg-amber-400 text-white py-3 sm:py-4 px-4 hover:bg-gray-800 transition-colors text-base sm:text-lg rounded-sm font-semibold font-circew-1/2  sm:w-auto">
+                      View Products
+                    </button>
                   </Link>
                 </div>
               </div>
@@ -269,9 +274,9 @@ export default function HomePage() {
                 </div>
                 <div>
                   <Link href='/products'>
-                  <button className="bg-amber-400 text-white py-3 sm:py-4 px-4 hover:bg-gray-800 transition-colors text-base sm:text-lg rounded-sm font-semibold font-circew-1/2  sm:w-auto">
-                    View Products
-                  </button>
+                    <button className="bg-amber-400 text-white py-3 sm:py-4 px-4 hover:bg-gray-800 transition-colors text-base sm:text-lg rounded-sm font-semibold font-circew-1/2  sm:w-auto">
+                      View Products
+                    </button>
                   </Link>
                 </div>
               </div>
@@ -281,18 +286,18 @@ export default function HomePage() {
       </section>
 
       {/* Closing Statement Section */}
-<section className="py-16 sm:py-20 lg:py-24 bg-amber-50">
-  <div className="container mx-auto px-4 max-w-3xl text-center">
-    <h2 className={`text-2xl sm:text-3xl font-semibold text-gray-900 mb-6 ${zillaSlab.className}`}>
-      Nourishing Homes, One Bake at a Time
-    </h2>
-    <p className="text-base sm:text-lg text-gray-700 leading-relaxed font-circe">
-      At the heart of every kitchen lies the promise of warmth, tradition, and togetherness. Whether you're baking for
-      family, friends, or simply yourself, we're honored to be a part of your journey. Thank you for choosing us to be a
-      small yet meaningful ingredient in your story.
-    </p>
-  </div>
-</section>
+      <section className="py-16 sm:py-20 lg:py-24 bg-amber-50">
+        <div className="container mx-auto px-4 max-w-3xl text-center">
+          <h2 className={`text-2xl sm:text-3xl font-semibold text-gray-900 mb-6 ${zillaSlab.className}`}>
+            Nourishing Homes, One Bake at a Time
+          </h2>
+          <p className="text-base sm:text-lg text-gray-700 leading-relaxed font-circe">
+            At the heart of every kitchen lies the promise of warmth, tradition, and togetherness. Whether you're baking for
+            family, friends, or simply yourself, we're honored to be a part of your journey. Thank you for choosing us to be a
+            small yet meaningful ingredient in your story.
+          </p>
+        </div>
+      </section>
 
 
       {/* Footer */}

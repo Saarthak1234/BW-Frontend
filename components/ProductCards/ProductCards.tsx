@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Zilla_Slab } from "next/font/google"
+import { BarLoader, BounceLoader, PuffLoader, RingLoader } from "react-spinners"
 
 // Configure the Google Font
 const zillaSlab = Zilla_Slab({
@@ -22,15 +23,15 @@ export default function ProductsSection() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        setLoading(true)
+        setLoading(true) 
         const response = await fetch('/api/products')
-        
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`)
         }
-        
+
         const result = await response.json()
-        
+
         if (result.success) {
           setProducts(result.data)
         } else {
@@ -56,8 +57,16 @@ export default function ProductsSection() {
             Our Premium Products
           </h1>
           <div className="flex justify-center items-center min-h-[400px]">
-            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-amber-600"></div>
+            {/* <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-amber-600"></div> */}
+            <PuffLoader
+            color={"#D97706"}
+            loading={loading}
+            // cssOverride={override}
+            size={80}
+            aria-label="Loading Spinner"
+            data-testid="loader" />
           </div>
+          
         </div>
       </div>
     )
@@ -74,8 +83,8 @@ export default function ProductsSection() {
           <div className="flex justify-center items-center min-h-[400px]">
             <div className="text-center">
               <p className="text-red-600 text-lg mb-4">{error}</p>
-              <button 
-                onClick={() => window.location.reload()} 
+              <button
+                onClick={() => window.location.reload()}
                 className="bg-amber-500 text-white py-2 px-4 rounded hover:bg-amber-600 transition-colors"
               >
                 Retry
@@ -99,7 +108,7 @@ export default function ProductsSection() {
               key={product.id}
               className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg hover:border-2 hover:border-amber-400 hover:scale-101 transition-all duration-300 border-2 border-transparent"
             >
-              
+
               {/* Product Image */}
               <div className="relative h-96 sm:h-64 bg-gray-100">
                 <Image

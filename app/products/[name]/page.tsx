@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation"
 import Image from "next/image"
 import { ArrowLeft } from "lucide-react"
 import { Zilla_Slab } from "next/font/google"
+import { PuffLoader } from "react-spinners"
 
 // Configure the Google Font
 const zillaSlab = Zilla_Slab({
@@ -18,7 +19,7 @@ export default function ProductDetailPage() {
   const params = useParams()
   const router = useRouter()
   const productName = params.name as string
-  
+
   const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -30,7 +31,7 @@ export default function ProductDetailPage() {
         setLoading(true)
         console.log(`Fetching product with name: ${productName}`)
         const response = await fetch(`/api/products/${productName}`)
-        
+
         if (!response.ok) {
           if (response.status === 404) {
             setError('Product not found')
@@ -39,9 +40,9 @@ export default function ProductDetailPage() {
           }
           return
         }
-        
+
         const result = await response.json()
-        
+
         if (result.success) {
           setProduct(result.data)
         } else {
@@ -73,9 +74,16 @@ export default function ProductDetailPage() {
             <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
-        
+
         <div className="flex justify-center items-center min-h-[400px]">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-amber-600"></div>
+          {/* <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-amber-600"></div> */}
+          <PuffLoader
+            color={"#D97706"}
+            loading={loading}
+            // cssOverride={override}
+            size={80}
+            aria-label="Loading Spinner"
+            data-testid="loader" />
         </div>
       </div>
     )
@@ -94,14 +102,14 @@ export default function ProductDetailPage() {
             <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
-        
+
         <div className="flex items-center justify-center min-h-[400px] p-4">
           <div className="text-center max-w-md w-full">
             <h1 className={`text-xl sm:text-2xl font-bold text-gray-900 mb-4 ${zillaSlab.className}`}>
               {error === 'Product not found' ? 'Product Not Found' : 'Error Loading Product'}
             </h1>
             <p className="text-gray-600 mb-6">
-              {error === 'Product not found' 
+              {error === 'Product not found'
                 ? 'The product you are looking for does not exist or has been removed.'
                 : error || 'Something went wrong while loading the product.'
               }

@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma'
 // GET /api/products/[id] - Fetch a single product by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { name: string } }
+  { params }: { params:  { name: string } }
 ) {
   try {
     const { name } = params
